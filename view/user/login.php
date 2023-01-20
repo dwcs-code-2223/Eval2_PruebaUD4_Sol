@@ -16,6 +16,21 @@
                     <input type="password" id="currentPwd" class="form-control" name="pwd" required/>
 
                 </div>
+                
+                 <div class="form-group mb-4">
+                            <label class="form-label" for="rol">Seleccione el rol:</label>
+
+                            <select name="rol" id="rol" required>
+                                <?php 
+                              
+                                $app_roles = $dataToView["data"]->getAppRoles();
+                                foreach ($app_roles as $rol) { ?>
+
+
+                                    <option value="<?= $rol->getId() ?>"> <?= $rol->getName() ?> </option>
+                                <?php } ?>
+                            </select>              </div>
+                
                 <!-- Submit button -->
                 <input type="submit" class="btn btn-primary btn-block mb-4" value="Iniciar sesión"></button>
 
@@ -23,8 +38,8 @@
             </form>        
             <?php
             echo password_hash("abc123.", PASSWORD_BCRYPT);
-            $usuario = $dataToView["data"];
-            if($usuario!=null && ($usuario->getStatus()=== Util::OPERATION_NOK)) {
+            $loginViewData = $dataToView["data"];
+            if(($loginViewData!=null) && ($loginViewData->getStatus()=== Util::OPERATION_NOK)) {
                 ?>
 
                 <div class="alert alert-danger" role="alert">

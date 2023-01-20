@@ -11,6 +11,9 @@
  * @author wadmin
  */
 class Rol {
+    
+    use ViewData;
+    
     private int $id;
     private string $name;
     

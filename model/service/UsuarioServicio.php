@@ -5,31 +5,54 @@ class UsuarioServicio {
     const USER_DOES_NOT_EXIST = "No existe usuario";
     const PWD_INCORRECT = "La contraseña no es correcta";
 
-    private IUsuarioRepository $repository;
+    private IUsuarioRepository $userRepository;
+    private IRolRepository $rolRepository;
 
     public function __construct() {
-        $this->repository = new UsuarioRepository();
+        $this->userRepository = new UsuarioRepository();
+        $this->rolRepository = new RolRepository();
     }
 
     /* Get all notes */
 
     public function getUsuarios(): array {
 
-        $usuarios = $this->repository->getUsuarios();
+        $usuarios = $this->userRepository->getUsuarios();
 
         return $usuarios;
     }
 
-    public function login(string $user, string $pwd): ?Usuario {
+    public function login(string $user, string $pwd, $rolId): ?Usuario {
 
-        $userResult = $this->repository->getUsuarioByEmail($user);
+        $userResult = $this->userRepository->getUsuarioByEmail($user);
 
         if ($userResult != null && password_verify($pwd, $userResult->getPwdhash())) {
 
-            return $userResult;
-        } else {
-            return null;
+            //check if selected rol is among user roles
+            if ($this->isUserInRole($userResult, $rolId)) {
+
+                return $userResult;
+            }
         }
+        return null;
+    }
+
+    public function getRoles(): array {
+
+        $roles = $this->rolRepository->getRoles();
+
+        return $roles;
+    }
+
+    private function isUserInRole(Usuario $usuario, int $roleId): bool {
+        $rolesArray = $usuario->getRoles();
+        foreach ($rolesArray as $rol) {
+            if ($rol->getId() === $roleId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

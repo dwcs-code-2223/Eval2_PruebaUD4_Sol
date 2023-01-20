@@ -9,9 +9,9 @@
  *
  * @author wadmin
  */
-interface IUsuarioRepository {
+interface IRolRepository {
 
-   public function getUsuarios(): array;
+    public function getRoles(): array;
 
-    public function getUsuarioByEmail($email): Usuario;
+   
 }
