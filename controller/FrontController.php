@@ -1,4 +1,5 @@
 <?php
+ob_start();
 
 require_once dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'config/config.php';
 require_once dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'includes/autoload.php';
@@ -38,4 +39,5 @@ if (method_exists($controller, $_GET["action"])) {
 require_once dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'view/template/header.php';
 require_once dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'view/' . $controller->view . '.php';
 require_once dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'view/template/footer.php';
+ob_end_flush();
 ?>

@@ -7,7 +7,7 @@ class NotaController {
     private $notaServicio;
 
     public function __construct() {
-        $this->view = 'list_note';
+        $this->view = 'nota'.DIRECTORY_SEPARATOR.'list_note';
         $this->page_title = '';
         $this->notaServicio = new NotaServicio();
     }
@@ -24,7 +24,7 @@ class NotaController {
 
     public function edit($id = null) {
         $this->page_title = 'Editar nota';
-        $this->view = 'edit_note';
+        $this->view = 'nota'.DIRECTORY_SEPARATOR.'edit_note';
         /* Id can from get param or method param */
         if (isset($_GET["id"])) {
             $id = $_GET["id"];
@@ -40,7 +40,7 @@ class NotaController {
     /* Create or update note */
 
     public function save() {
-        $this->view = 'edit_note';
+        $this->view = 'nota'.DIRECTORY_SEPARATOR.'edit_note';
         $this->page_title = 'Editar nota';
 
         if (isset($_POST["id"]) && trim($_POST["id"]) !== "" && is_numeric($_POST["id"])) {
@@ -79,7 +79,7 @@ class NotaController {
 
     public function confirmDelete() {
         $this->page_title = 'Eliminar nota';
-        $this->view = 'confirm_delete_note';
+        $this->view = 'nota'.DIRECTORY_SEPARATOR.'confirm_delete_note';
         return $this->notaServicio->getNoteById($_GET["id"]);
     }
 
@@ -87,7 +87,7 @@ class NotaController {
 
     public function delete(): bool {
         $this->page_title = 'Listado de notas';
-        $this->view = 'delete_note';
+        $this->view ='nota'.DIRECTORY_SEPARATOR. 'delete_note';
         return $this->notaServicio->deleteNoteById($_POST["id"]);
     }
 

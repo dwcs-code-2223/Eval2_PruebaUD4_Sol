@@ -16,6 +16,7 @@ class Usuario implements JsonSerializable {
     private string $pwdhash;
     private array $roles;
     
+    use ViewData;
     
     public function __construct(string $email, string $pwdhash, array $roles) {
         $this->email = $email;
@@ -64,5 +65,14 @@ class Usuario implements JsonSerializable {
             'pwdhash' => $this->pwdhash,
             'roles' => $this->roles
         );
+    }
+    
+    
+    public function getRoleNamesCSV(){
+        $roleNamesArray=[];
+        foreach ($this->roles as $key => $value) {
+            array_push($roleNamesArray, $value->getName());
+        }
+        return implode(", ", $roleNamesArray);
     }
 }

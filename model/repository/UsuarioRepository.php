@@ -19,7 +19,7 @@ class UsuarioRepository implements IUsuarioRepository{
     public function __construct() {
         $this->filePath = dirname(__FILE__, 3) . DIRECTORY_SEPARATOR . self::RUTA_FICHERO;
         $this->usuariosArray = $this->getUsuarios();
-        print_r($this->usuariosArray);
+        //print_r($this->usuariosArray);
     }
     
       public function getUsuarios(): array {
@@ -37,5 +37,16 @@ class UsuarioRepository implements IUsuarioRepository{
         }
 
         return $arrayUsuarios;
+    }
+    
+    public function getUsuarioByEmail($email): Usuario{
+         $usuario = null;
+
+        foreach ($this->usuariosArray as $key => $usuario) {
+            if ($usuario->getEmail() === $email) {
+                return $usuario;
+            }
+        }
+        return $usuario;
     }
 }

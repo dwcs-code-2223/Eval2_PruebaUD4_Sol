@@ -1,8 +1,8 @@
 <?php
 
 /* Default options */
-const DEFAULT_CONTROLLER = "Nota";
-const DEFAULT_ACTION = "list";
+const DEFAULT_CONTROLLER = "Usuario";
+const DEFAULT_ACTION = "loginGet";
 
 const CONTROLLERS_FOLDER="controller";
 
@@ -18,4 +18,8 @@ const TRAITS_FOLDER=MODELS_FOLDER.DIRECTORY_SEPARATOR."traits";
 const IMAGES_FOLDER="files";
 
 const IMAGE_DEFAULT="no-picture.jpg";
+
+
+
+const LOGIN_ERROR_MSG = "No se ha podido iniciar sesión";
 ?>

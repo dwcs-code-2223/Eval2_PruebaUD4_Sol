@@ -32,9 +32,7 @@ class Util {
         //Toma las propiedades de la clase:     //https://www.php.net/manual/es/reflectionclass.getproperties.php
         $properties = $reflection->getProperties();
 
-        foreach ($properties as $key => $value) {
-            echo $value->getName() . ' ' . $value->getType();
-        }
+       
 
         //$key es clave numérica, $property es un objeto ReflectionProperty https://www.php.net/manual/es/class.reflectionproperty.php#reflectionproperty.constants.modifiers
 
@@ -46,6 +44,7 @@ class Util {
 
             if (in_array($property->getName(), $claves_obj)) {
 
+                //Fix para array de objetos Rol
                 if ($property->getName() == "roles") {
                     $array_objtect_roles = [];
                     foreach ($obj_como_array_asoc["roles"] as $key => $rol) {
