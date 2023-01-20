@@ -39,14 +39,5 @@ class RolRepository implements IRolRepository{
         return $arrayroles;
     }
     
-    public function getUsuarioByEmail($email): Usuario{
-         $usuario = null;
-
-        foreach ($this->usuariosArray as $key => $usuario) {
-            if ($usuario->getEmail() === $email) {
-                return $usuario;
-            }
-        }
-        return $usuario;
-    }
+  
 }

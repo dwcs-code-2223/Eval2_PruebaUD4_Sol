@@ -18,7 +18,6 @@ class UsuarioController {
 
     public function list() {
         $this->page_title = 'Listado de usuarios';
-
         return $this->usuarioServicio->getUsuarios();
     }
 
@@ -28,15 +27,14 @@ class UsuarioController {
 
         $app_roles = $this->usuarioServicio->getRoles();
         $loginViewData = new LoginViewData($app_roles);
-        
-        
+
         if (isset($_POST["email"]) && isset($_POST["pwd"]) && isset($_POST["rol"])) {
             $email = $_POST["email"];
             $pwd = $_POST["pwd"];
-            $rol = $_POST["rol"];
+            $rolId = $_POST["rol"];
 
             //Devuelve null si ha habido algún error
-            $userResult = $this->usuarioServicio->login($email, $pwd, $rol);
+            $userResult = $this->usuarioServicio->login($email, $pwd, $rolId);
 
             if ($userResult == null) {
 
@@ -45,8 +43,15 @@ class UsuarioController {
             } else {
                 $this->iniciarSesion();
                 $_SESSION["userId"] = $userResult->getId();
+                $_SESSION["email"] = $userResult->getEmail();
+                $_SESSION["roleId"] = $rolId;
                 $_SESSION["ultimoAcceso"] = time();
-                header("Location: FrontController.php?controller=Nota&action=list");
+                if ($this->usuarioServicio->isUserInRoleName($userResult, ADMIN_ROLE)) {
+                    $this->redirectTo("Usuario", "list");
+                } elseif ($this->usuarioServicio->isUserInRoleName($userResult, USER_ROLE)) {
+                    $this->redirectTo("Nota", "list");
+                }
+
                 exit;
             }
         } else {
@@ -61,6 +66,10 @@ class UsuarioController {
         }
 
         return $iniciada;
+    }
+
+    private function redirectTo(string $controller, string $action): void {
+        header("Location: FrontController.php?controller=$controller&action=$action");
     }
 
 }

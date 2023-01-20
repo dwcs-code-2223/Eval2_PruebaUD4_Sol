@@ -44,7 +44,7 @@ class UsuarioServicio {
         return $roles;
     }
 
-    private function isUserInRole(Usuario $usuario, int $roleId): bool {
+    public function isUserInRole(Usuario $usuario, int $roleId): bool {
         $rolesArray = $usuario->getRoles();
         foreach ($rolesArray as $rol) {
             if ($rol->getId() === $roleId) {
@@ -55,6 +55,16 @@ class UsuarioServicio {
         return false;
     }
 
+       public function isUserInRoleName(Usuario $usuario, string $roleName): bool {
+        $rolesArray = $usuario->getRoles();
+        foreach ($rolesArray as $rol) {
+            if ($rol->getName() === $roleName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 ?>

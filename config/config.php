@@ -24,4 +24,7 @@ const IMAGE_DEFAULT="no-picture.jpg";
 
 
 const LOGIN_ERROR_MSG = "No se ha podido iniciar sesión";
+
+const ADMIN_ROLE="admin";
+const USER_ROLE="user";
 ?>
