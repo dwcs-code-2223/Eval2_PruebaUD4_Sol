@@ -10,7 +10,7 @@ class Util {
     CONST OPERATION_OK = 0;
     CONST OPERATION_NOK = 1;
     CONST NO_OPERATION = 2;
-    CONST IMAGE_ERROR=3;
+    CONST IMAGE_ERROR = 3;
 
     /*
      * Transforma un array asociativo en un objeto de la clase $class siempre y cuando el array y la clase tengan claves y nombres de propiedades iguales
@@ -32,6 +32,10 @@ class Util {
         //Toma las propiedades de la clase:     //https://www.php.net/manual/es/reflectionclass.getproperties.php
         $properties = $reflection->getProperties();
 
+        foreach ($properties as $key => $value) {
+            echo $value->getName() . ' ' . $value->getType();
+        }
+
         //$key es clave numérica, $property es un objeto ReflectionProperty https://www.php.net/manual/es/class.reflectionproperty.php#reflectionproperty.constants.modifiers
 
         $claves_obj = array_keys($obj_como_array_asoc);
@@ -41,8 +45,20 @@ class Util {
             $property->setAccessible(true);
 
             if (in_array($property->getName(), $claves_obj)) {
-                //Establecemos en el objeto de $class, la propiedad con el mismo nombre  de la clave de $obj_como_array_asoc
-                $property->setValue($instance, $obj_como_array_asoc[$property->getName()]);
+
+                if ($property->getName() == "roles") {
+                    $array_objtect_roles = [];
+                    foreach ($obj_como_array_asoc["roles"] as $key => $rol) {
+                        $rol_object = self::json_decode_array_to_class($rol, "Rol");
+                        array_push($array_objtect_roles, $rol_object);
+                    }
+
+                    //Establecemos en el objeto de $class, la propiedad con el mismo nombre  de la clave de $obj_como_array_asoc
+                    $property->setValue($instance, $array_objtect_roles);
+                } else {
+                    //Establecemos en el objeto de $class, la propiedad con el mismo nombre  de la clave de $obj_como_array_asoc
+                    $property->setValue($instance, $obj_como_array_asoc[$property->getName()]);
+                }
             }
         }
         return $instance;
