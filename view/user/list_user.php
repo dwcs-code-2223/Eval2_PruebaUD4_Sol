@@ -2,10 +2,7 @@
     <div class="col-md-12 text-right">
       
     </div>
-    <?php if (count($dataToView["data"]) > 0) {
-        
-        echo "count: ". count($dataToView["data"]);
-        ?>
+    <?php if (count($dataToView["data"]) > 0) : ?>
 
         <table class="table">
             <thead>
@@ -29,12 +26,14 @@
                 ?>
             </tbody>
         </table>
-    <?php} else {?>
+    <?php endif;
+    
+    if(count($dataToView["data"])===0):?>
         
         <div class="alert alert-info">
             Actualmente no existen usuarios.
         </div>
         <?php
-    }
+    endif;
     ?>
 </div>

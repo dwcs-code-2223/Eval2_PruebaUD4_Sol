@@ -3,20 +3,28 @@
 class UsuarioController {
 
     const VIEW_FOLDER = "user";
+    
 
     public $page_title;
     public $view;
     private UsuarioServicio $usuarioServicio;
+    private array $action_roles_array;
 
     public function __construct() {
-        $this->view = 'user' . DIRECTORY_SEPARATOR . 'list_user';
+        $this->view = self::VIEW_FOLDER . DIRECTORY_SEPARATOR . 'login';
         $this->page_title = '';
         $this->usuarioServicio = new UsuarioServicio();
+   //Para cada action se registran los roles permitidos [ADMIN_ROLE =1, USER_ROLE=2]
+        $this->action_roles_array=["list" => [1]];
+            
+        
     }
 
     /* List all notes */
 
     public function list() {
+        
+        $this->view=self::VIEW_FOLDER . DIRECTORY_SEPARATOR .'list_user';
         $this->page_title = 'Listado de usuarios';
         return $this->usuarioServicio->getUsuarios();
     }
@@ -41,14 +49,16 @@ class UsuarioController {
                 $loginViewData->setStatus(Util::OPERATION_NOK);
                 return $loginViewData;
             } else {
-                $this->iniciarSesion();
+                SessionManager::iniciarSesion();
                 $_SESSION["userId"] = $userResult->getId();
                 $_SESSION["email"] = $userResult->getEmail();
                 $_SESSION["roleId"] = $rolId;
                 $_SESSION["ultimoAcceso"] = time();
-                if ($this->usuarioServicio->isUserInRoleName($userResult, ADMIN_ROLE)) {
+                
+                 $user_selected_rol= $this->usuarioServicio->getRoleById($rolId);
+                if ($user_selected_rol->getName()===ADMIN_ROLE) {
                     $this->redirectTo("Usuario", "list");
-                } elseif ($this->usuarioServicio->isUserInRoleName($userResult, USER_ROLE)) {
+                } elseif ($user_selected_rol->getName()===USER_ROLE) {
                     $this->redirectTo("Nota", "list");
                 }
 
@@ -59,18 +69,47 @@ class UsuarioController {
         }
     }
 
-    private function iniciarSesion(): bool {
-        $iniciada = true;
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            $iniciada = session_start();
-        }
-
-        return $iniciada;
+    public function logout() {
+      SessionManager::cerrarSesion();
+       $this->redirectTo("Usuario", "login");
+      
     }
+    
+//    private function cerrarSesion(){
+//         $this->iniciarSesion();
+//
+//        session_destroy();
+//
+//        $_SESSION = array();
+//
+//        if (ini_get("session.use_cookies")) {
+//            $params = session_get_cookie_params();
+//            setcookie(session_name(), '', time() - 42000,
+//                    $params["path"], $params["domain"],
+//                    $params["secure"], $params["httponly"]
+//            );
+//        }
+//    }
+
+//    private function iniciarSesion(): bool {
+//        $iniciada = true;
+//        if (session_status() !== PHP_SESSION_ACTIVE) {
+//            $iniciada = session_start();
+//        }
+//
+//        return $iniciada;
+//    }
 
     private function redirectTo(string $controller, string $action): void {
         header("Location: FrontController.php?controller=$controller&action=$action");
+        exit;
     }
+    
+    
+    public function getAction_roles_array(): array {
+        return $this->action_roles_array;
+    }
+
 
 }
 

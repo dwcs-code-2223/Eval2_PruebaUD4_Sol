@@ -44,6 +44,20 @@ class UsuarioServicio {
         return $roles;
     }
 
+     public function getRoleById(int $roleId): Rol {
+
+      $roles = $this->rolRepository->getRoles();
+      foreach ($roles as $rol) {
+          if($rol->getId()===$roleId){
+              return $rol;
+          }
+          
+      }
+      
+
+        return null;
+    }
+    
     public function isUserInRole(Usuario $usuario, int $roleId): bool {
         $rolesArray = $usuario->getRoles();
         foreach ($rolesArray as $rol) {
