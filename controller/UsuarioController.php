@@ -69,29 +69,7 @@ class UsuarioController {
         $this->redirectTo("Usuario", "login");
     }
 
-//    private function cerrarSesion(){
-//         $this->iniciarSesion();
-//
-//        session_destroy();
-//
-//        $_SESSION = array();
-//
-//        if (ini_get("session.use_cookies")) {
-//            $params = session_get_cookie_params();
-//            setcookie(session_name(), '', time() - 42000,
-//                    $params["path"], $params["domain"],
-//                    $params["secure"], $params["httponly"]
-//            );
-//        }
-//    }
-//    private function iniciarSesion(): bool {
-//        $iniciada = true;
-//        if (session_status() !== PHP_SESSION_ACTIVE) {
-//            $iniciada = session_start();
-//        }
-//
-//        return $iniciada;
-//    }
+
 
     private function redirectTo(string $controller, string $action): void {
         header("Location: FrontController.php?controller=$controller&action=$action");

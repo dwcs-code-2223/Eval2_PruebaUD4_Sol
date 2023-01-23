@@ -65,5 +65,9 @@ class SessionManager {
 
         return $active;
     }
+    
+    public static function updateLastAccess(){
+        $_SESSION["ultimoAcceso"]= time();
+    }
 
 }

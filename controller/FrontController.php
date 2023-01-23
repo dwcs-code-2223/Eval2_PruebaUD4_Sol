@@ -8,11 +8,12 @@ require_once dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'config/config.php';
 require_once dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'includes/autoload.php';
 ini_set("session.cookie_lifetime", MAX_SECONDS_INACTIVITY);
 
-if (!isset($_GET["controller"])) {
+
+if (!isset($_GET["controller"]) || !SessionManager::isUserLoggedIn()) {
     $_GET["controller"] = DEFAULT_CONTROLLER;
 }
 
-if (!isset($_GET["action"])) {
+if (!isset($_GET["action"]) || !SessionManager::isUserLoggedIn()) {
     $_GET["action"] = DEFAULT_ACTION;
 }
 
@@ -22,6 +23,8 @@ $controller_path = $_GET["controller"] . '.php';
 if (!file_exists($controller_path)) {
     $controller_path = DEFAULT_CONTROLLER . 'Controller.php';
 }
+
+
 
 /* Load controller */
 //require_once $controller_path; //Se hace en autoload.php
@@ -57,6 +60,7 @@ if (method_exists($controller, $_GET["action"])) {
     if ($allowed) {
         //Se llama a la action
         $dataToView["data"] = $controller->{$_GET["action"]}();
+        SessionManager::updateLastAccess();
         $mainBodyView = $controller->view . '.php';
     } else {
         $mainBodyView = 'template' . DIRECTORY_SEPARATOR . '403Forbidden.php';
