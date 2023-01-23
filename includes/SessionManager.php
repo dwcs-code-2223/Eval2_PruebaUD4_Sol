@@ -11,19 +11,20 @@
  * @author wadmin
  */
 class SessionManager {
-    
-    public static function isRoleAllowedInAction(array $actionAllowedRoles){
+
+    CONST MAX_SECONDS_INACTIVITY = 600;
+
+    public static function isRoleAllowedInAction(array $actionAllowedRoles) {
         self::iniciarSesion();
-        if(isset($_SESSION["roleId"])){
-          
+        if (isset($_SESSION["roleId"])) {
+
             return in_array($_SESSION["roleId"], $actionAllowedRoles);
         }
         return false;
     }
-    
-    
-     public static function cerrarSesion(){
-         self::iniciarSesion();
+
+    public static function cerrarSesion() {
+        self::iniciarSesion();
 
         session_destroy();
 
@@ -46,4 +47,23 @@ class SessionManager {
 
         return $iniciada;
     }
+
+    public static function isUserLoggedIn() {
+        $autenticado = self::iniciarSesion() && isset($_SESSION["userId"]) && isset($_SESSION["roleId"]) && isset($_SESSION["ultimoAcceso"]);
+        return $autenticado && self::isUserActive();
+    }
+
+    public static function isUserActive(): bool {
+        $active = false;
+        $actual_time = time();
+        $diff = $actual_time - $_SESSION["ultimoAcceso"];
+        if ($diff < MAX_SECONDS_INACTIVITY) {
+            $active = true;
+        } else {
+            self::cerrarSesion();
+        }
+
+        return $active;
+    }
+
 }
