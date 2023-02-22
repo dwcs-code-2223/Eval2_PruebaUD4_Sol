@@ -29,8 +29,12 @@ class AuthorizationManager {
             $filePath = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . self::RUTA_FICHERO;
             $assoc_array = json_decode(file_get_contents($filePath), true);
 
-            //Cambiamos a lower case las claves
+            //Cambiamos a lower case las claves (los nombres de los controladores)
             $assoc_array_lowercase = array_change_key_case($assoc_array, CASE_LOWER);
+            foreach ($assoc_array_lowercase as $controllerNameKey => $action_roles_Array) {
+                //Cambiamos a lower case las claves de las action (los nombres de las action)
+               $assoc_array_lowercase[$controllerNameKey] =array_change_key_case($action_roles_Array, CASE_LOWER);
+            }
             self::$controller_action_roles_array_assoc = $assoc_array_lowercase;
         }
         $allowed_rol_ids_in_action = self::$controller_action_roles_array_assoc[strtolower($controllerName)][strtolower($action)];
