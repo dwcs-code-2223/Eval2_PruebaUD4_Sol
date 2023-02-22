@@ -22,6 +22,7 @@ class UsuarioServicio {
         return $usuarios;
     }
 
+    //a) iniciar sesión utilizando password_hash() y password_verify() con BCRYPT y parámetros por defecto (1 punto)
     public function login(string $user, string $pwd, $rolId): ?Usuario {
 
         $userResult = $this->userRepository->getUsuarioByEmail($user);

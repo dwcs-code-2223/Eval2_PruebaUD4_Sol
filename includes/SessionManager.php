@@ -11,6 +11,14 @@
  * @author wadmin
  */
 class SessionManager {
+    
+//    e) Para las operaciones relacionadas con la sesión puedes crear una clase nueva SessionManager con métodos estáticos que permitan gestionar (2 puntos) :
+//-inicio de sesión
+//-cierre de sesión
+//-comprobación de tiempo de actividad de usuario
+//-si usuario tiene los roles adecuados para ejecutar una determinada action y cualquier otra funcionalidad que precises
+//
+//La clase SessionManager será invocada desde los controllers que la necesiten.
 
     CONST MAX_SECONDS_INACTIVITY = 600;
 
@@ -53,6 +61,7 @@ class SessionManager {
         return $autenticado && self::isUserActive();
     }
 
+//    h) Establece un tiempo máximo de inactividad con el servidor tras el cual se cerrará la sesión de forma automática. Actualiza el tiempo de acceso, siempre que se invoque una action con el rol permitido. (1 punto)
     public static function isUserActive(): bool {
         $active = false;
         $actual_time = time();

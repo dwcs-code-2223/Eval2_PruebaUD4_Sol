@@ -2,13 +2,13 @@
 
 ob_start();
 
-
-
 require_once dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'config/config.php';
 require_once dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'includes/autoload.php';
+//i) Establece el tiempo máximo de duración de la cookie al mismo valor mediante una directiva (que afecte solo al script php) 
 ini_set("session.cookie_lifetime", MAX_SECONDS_INACTIVITY);
 
-
+//    h) Establece un tiempo máximo de inactividad con el servidor tras el cual se cerrará la sesión de forma automática. Actualiza el tiempo de acceso, siempre que se invoque una action con el rol permitido. (1 punto)
+   
 if (!isset($_GET["controller"]) || !SessionManager::isUserLoggedIn()) {
     $_GET["controller"] = DEFAULT_CONTROLLER;
 }
@@ -39,24 +39,9 @@ $dataToView["data"] = array();
 if (method_exists($controller, $_GET["action"])) {
 
 
+//    g) Deberá comprobarse, cada vez que un usuario intente invocar una action concreta de un controlador, que el rol con el que ha iniciado sesión está entre los roles permitidos de la action. En caso contrario ha de redigirse al usuario a una vista nueva indicando que no tiene permisos. En lugar de utilizar código en cada action, piensa en un mecanismo que permita realizar la autorización en un único punto. (1,5 puntos)
+    $allowed = AuthorizationManager::isUserAuthorized($controllerName, $_GET["action"]);
 
-    
-    /* Check roles */
-
-    $allowed = true; //Por defecto suponemos que se permite acceso
-    if (count($controller->getAction_roles_array()) > 0) {
-
-        //existe control de acceso para al menos una acción
-        if (isset($controller->getAction_roles_array()[$_GET["action"]])) {
-            //existe control de acceso para la accion de la url
-
-            $allowedRolesInAction = $controller->getAction_roles_array()[$_GET["action"]];
-
-            if (!SessionManager::isRoleAllowedInAction($allowedRolesInAction)) {
-                $allowed = false;
-            }
-        }
-    }
     if ($allowed) {
         //Se llama a la action
         $dataToView["data"] = $controller->{$_GET["action"]}();

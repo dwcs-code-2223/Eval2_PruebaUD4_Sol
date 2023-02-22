@@ -1,4 +1,15 @@
 <div class="container-fluid">
+    
+     <?php
+            
+            $loginViewData = $dataToView["data"];
+            if(($loginViewData!=null) && ($loginViewData->getStatus()=== Util::OPERATION_NOK)) {
+                ?>
+
+                <div class="alert alert-danger" role="alert">
+                    <?=LOGIN_ERROR_MSG; ?>
+            </div>
+            <?php }  ?>
 
     <div class="row justify-content-center">
         <div class="col-sm-12 col-md-6">
@@ -22,7 +33,7 @@
 
                             <select name="rol" id="rol" required>
                                 <?php 
-                              
+                                      //b) permitir seleccionar entre los 2 roles de la aplicación: admin y user 
                                 $app_roles = $dataToView["data"]->getAppRoles();
                                 foreach ($app_roles as $rol) { ?>
 
@@ -36,16 +47,7 @@
 
 
             </form>        
-            <?php
-            echo password_hash("abc123.", PASSWORD_BCRYPT);
-            $loginViewData = $dataToView["data"];
-            if(($loginViewData!=null) && ($loginViewData->getStatus()=== Util::OPERATION_NOK)) {
-                ?>
-
-                <div class="alert alert-danger" role="alert">
-                    <?=LOGIN_ERROR_MSG; ?>
-            </div>
-            <?php } else {echo "login ok";} ?>
+           
         </div>
     </div>
 </div>

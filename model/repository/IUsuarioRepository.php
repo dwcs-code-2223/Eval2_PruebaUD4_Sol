@@ -11,7 +11,8 @@
  */
 interface IUsuarioRepository {
 
-   public function getUsuarios(): array;
+    public function getUsuarios(): array;
 
+//a) iniciar sesión utilizando password_hash() y password_verify() con BCRYPT y parámetros por defecto (1 punto)
     public function getUsuarioByEmail($email): Usuario;
 }

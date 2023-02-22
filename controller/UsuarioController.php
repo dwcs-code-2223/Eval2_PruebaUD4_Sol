@@ -7,14 +7,13 @@ class UsuarioController {
     public $page_title;
     public $view;
     private UsuarioServicio $usuarioServicio;
-    private array $action_roles_array;
+
 
     public function __construct() {
         $this->view = self::VIEW_FOLDER . DIRECTORY_SEPARATOR . 'login';
         $this->page_title = '';
         $this->usuarioServicio = new UsuarioServicio();
-        //Para cada action se registran los roles permitidos [ADMIN_ROLE =1, USER_ROLE=2]
-        $this->action_roles_array = ["list" => [1]];
+  
     }
 
     /* List all notes */
@@ -27,6 +26,8 @@ class UsuarioController {
     }
 
     public function login() {
+//        f) En función del rol seleccionado en login, el usuario deberá ser redirigido a:
+//            Si el usuario ya ha iniciado sesión e intenta acceder a la página de login, deberá ser redirigido en función del rol seleccionado (0,25 puntos)
         if (SessionManager::isUserLoggedIn()) {
             $this->redirectAccordingToRole();
             exit;
@@ -34,6 +35,7 @@ class UsuarioController {
         $this->page_title = 'Inicio de sesión';
         $this->view = self::VIEW_FOLDER . DIRECTORY_SEPARATOR . 'login';
 
+        //b) permitir seleccionar entre los 2 roles de la aplicación: admin y user 
         $app_roles = $this->usuarioServicio->getRoles();
         $loginViewData = new LoginViewData($app_roles);
 
@@ -42,6 +44,7 @@ class UsuarioController {
             $pwd = $_POST["pwd"];
             $rolId = $_POST["rol"];
 
+            //a) iniciar sesión utilizando password_hash() y password_verify() con BCRYPT y parámetros por defecto (1 punto)
             //Devuelve null si ha habido algún error
             $userResult = $this->usuarioServicio->login($email, $pwd, $rolId);
 
@@ -50,6 +53,12 @@ class UsuarioController {
                 $loginViewData->setStatus(Util::OPERATION_NOK);
                 return $loginViewData;
             } else {
+//                c) Se guardará en la sesión (1 punto)
+//
+//    El id del usuario
+//    El id del rol seleccionado
+//    El email del usuario
+//    El tiempo de último acceso con time()
                 SessionManager::iniciarSesion();
                 $_SESSION["userId"] = $userResult->getId();
                 $_SESSION["email"] = $userResult->getEmail();
@@ -63,7 +72,7 @@ class UsuarioController {
             return $loginViewData;
         }
     }
-
+ //d) Se permitirá cerrar sesión en un formulario situado en el header.php que solo se mostrará si el usuario está autenticado. A su izquierda mostrará el email del usuario autenticado (1 punto)
     public function logout() {
         SessionManager::cerrarSesion();
         $this->redirectTo("Usuario", "login");
@@ -76,6 +85,7 @@ class UsuarioController {
         exit;
     }
 
+    //f) En función del rol seleccionado en login, el usuario deberá ser redirigido a:
     private function redirectAccordingToRole() {
         $user_selected_rol = $this->usuarioServicio->getRoleById($_SESSION["roleId"]);
         if ($user_selected_rol->getName() === ADMIN_ROLE) {
@@ -85,9 +95,7 @@ class UsuarioController {
         }
     }
 
-    public function getAction_roles_array(): array {
-        return $this->action_roles_array;
-    }
+   
 
 }
 

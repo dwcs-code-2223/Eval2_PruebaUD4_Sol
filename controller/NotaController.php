@@ -6,22 +6,15 @@ class NotaController {
     public $view;
     private $notaServicio;
     
-    private array $action_roles_array;
+   
 
     const VIEW_FOLDER = 'note';
 
     public function __construct() {
         $this->view = self::VIEW_FOLDER . DIRECTORY_SEPARATOR . 'list_note';
         $this->page_title = '';
-        $this->notaServicio = new NotaServicio();
-        
-           //Para cada action se registran los roles permitidos [ADMIN_ROLE =1, USER_ROLE=2]
-        $this->action_roles_array=["list" => [1,2],
-            "edit" => [1,2],
-            "save" =>[1,2],
-            "confirmDelete"=>[1,2],
-             "delete"=>[1,2]
-            ];
+        $this->notaServicio = new NotaServicio();        
+    
     }
 
     /* List all notes */
@@ -102,9 +95,7 @@ class NotaController {
     }
 
     
-    public function getAction_roles_array(): array {
-        return $this->action_roles_array;
-    }
+   
 
 
 }

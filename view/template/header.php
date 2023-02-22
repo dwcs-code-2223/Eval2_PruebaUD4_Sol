@@ -15,7 +15,9 @@
               
                 </div>
 
-                <?php if (SessionManager::iniciarSesion() && isset($_SESSION["userId"])) { 
+                <?php 
+                 //d) Se permitirá cerrar sesión en un formulario situado en el header.php que solo se mostrará si el usuario está autenticado. A su izquierda mostrará el email del usuario autenticado (1 punto)
+                if (SessionManager::iniciarSesion() && isset($_SESSION["userId"])) { 
                  
                     ?>
                     <div class="d-flex  justify-content-end  align-items-center">
