@@ -25,7 +25,7 @@
                             <p class="lead">¡Hola <?=$_SESSION["email"]?>!</p>
                         </div>
                         
-                        <form method="post" action="FrontController.php?action=Usuario&action=logout" class="d-flex mx-2 align-items-center justify-content-start">
+                        <form method="post" action="FrontController.php?controller=Usuario&action=logout" class="d-flex mx-2 align-items-center justify-content-start">
                               <input type="submit" class="btn btn-primary btn-block" value="Cerrar sesión" name="btnCerrar"></button>
                         </form>
                     </div>
