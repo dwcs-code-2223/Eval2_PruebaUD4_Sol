@@ -12,6 +12,8 @@
  */
 class SessionManager {
     
+      const MAX_TOKEN_LENGTH = 10;
+
 //    e) Para las operaciones relacionadas con la sesión puedes crear una clase nueva SessionManager con métodos estáticos que permitan gestionar (2 puntos) :
 //-inicio de sesión
 //-cierre de sesión
@@ -45,6 +47,14 @@ class SessionManager {
                     $params["secure"], $params["httponly"]
             );
         }
+
+        //c)
+
+        setcookie("userId", '', time() - self::MAX_SECONDS_INACTIVITY);
+        
+        
+        //h) 
+        setcookie("token", '', time()-self::MAX_SECONDS_INACTIVITY);
     }
 
     public static function iniciarSesion(): bool {
@@ -57,8 +67,24 @@ class SessionManager {
     }
 
     public static function isUserLoggedIn() {
-        $autenticado = self::iniciarSesion() && isset($_SESSION["userId"]) && isset($_SESSION["roleId"]) && isset($_SESSION["ultimoAcceso"]);
-        return $autenticado && self::isUserActive();
+
+        //b) ++ isset
+        $autenticado = self::iniciarSesion() && isset($_SESSION["userId"]) && isset($_SESSION["roleId"]) && isset($_SESSION["ultimoAcceso"]) && isset($_COOKIE["userId"]) && isset($_COOKIE["token"]) && isset($_SESSION["token"]);
+
+        //b)
+        if ($autenticado) {
+            $autenticado = $autenticado && ( (int) $_COOKIE["userId"] === $_SESSION["userId"]);
+            //g)
+            $autenticado = $autenticado && ($_COOKIE["token"]=== $_SESSION["token"]);
+        }
+        
+       //b) y g)
+        if (!$autenticado) {
+            SessionManager::cerrarSesion();
+            return false;
+        } else {
+            return $autenticado && self::isUserActive();
+        }
     }
 
 //    h) Establece un tiempo máximo de inactividad con el servidor tras el cual se cerrará la sesión de forma automática. Actualiza el tiempo de acceso, siempre que se invoque una action con el rol permitido. (1 punto)
@@ -74,9 +100,18 @@ class SessionManager {
 
         return $active;
     }
+
+    public static function updateLastAccess() {
+        $_SESSION["ultimoAcceso"] = time();
+    }
     
-    public static function updateLastAccess(){
-        $_SESSION["ultimoAcceso"]= time();
+    public static function getRandomToken(): string{
+      
+        //Genera un string formado por 10 dígitos
+        
+     $random_number=   random_int(0, 9999999999);
+     $random_token_string = str_pad($random_number,self::MAX_TOKEN_LENGTH, "0", STR_PAD_LEFT);
+     return $random_token_string;
     }
 
 }

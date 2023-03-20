@@ -64,6 +64,15 @@ class UsuarioController {
                 $_SESSION["email"] = $userResult->getEmail();
                 $_SESSION["roleId"] = $rolId;
                 $_SESSION["ultimoAcceso"] = time();
+                //a)
+                setcookie("userId", $userResult->getId(), time()+MAX_SECONDS_INACTIVITY);
+                
+                //e)
+                $token = SessionManager::getRandomToken();
+                $_SESSION["token"] =$token;
+                //f)
+                setcookie("token", $token, time()+MAX_SECONDS_INACTIVITY);
+                
                 $this->redirectAccordingToRole();
 
                 exit;
@@ -95,6 +104,12 @@ class UsuarioController {
         }
     }
 
+    
+    public function listCookies(){
+         $this->view = self::VIEW_FOLDER . DIRECTORY_SEPARATOR . 'list_cookies';
+        $this->page_title = 'Listado de cookies';
+        return $_COOKIE;
+    }
    
 
 }

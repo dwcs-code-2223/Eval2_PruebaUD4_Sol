@@ -17,9 +17,12 @@
 
                 <?php 
                  //d) Se permitirá cerrar sesión en un formulario situado en el header.php que solo se mostrará si el usuario está autenticado. A su izquierda mostrará el email del usuario autenticado (1 punto)
-                if (SessionManager::iniciarSesion() && isset($_SESSION["userId"])) { 
+                if (SessionManager::iniciarSesion() && SessionManager::isUserLoggedIn()) { 
                  
                     ?>
+                <a href="FrontController.php?controller=Usuario&action=listCookies">Mostrar cookies</a>
+                
+                
                     <div class="d-flex  justify-content-end  align-items-center">
                         <div class="d-flex mx-2 align-items-center justify-content-end">
                             <p class="lead">¡Hola <?=$_SESSION["email"]?>!</p>

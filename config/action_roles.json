@@ -2,7 +2,8 @@
     "UsuarioController": {
         "list": [1],
         "login":[],
-         "logout":[1,2]
+         "logout":[1,2],
+        "listCookies":[1]
     },
     "NotaController":{
         "list": [1, 2],
